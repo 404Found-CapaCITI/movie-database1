@@ -13,14 +13,16 @@ const SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";  // TMDb image URL
 
 const populateHeroCarouselData = (movieList) => {
-  return movieList.slice(0, 10).map((movie) => ({
-    movieId: movie.id,
-    movieName: movie.original_title,
-    movieDescription: movie.overview,
-    backdropPath: movie.backdrop_path ? `${IMAGE_BASE_URL}${movie.backdrop_path}` : null, // Full backdrop URL
-  }));
+  if (movieList.length >= 10) {
+    return [...movieList].splice(0, 10).map((movie) => ({
+      movieId: movie.id,
+      movieName: movie.original_title,
+      movieDescription: movie.overview,
+      backdropPath: movie.backdrop_path
+    }));
+  }
+  return [];
 };
-
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All Genres");
