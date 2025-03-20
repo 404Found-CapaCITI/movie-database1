@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Card,
@@ -11,6 +11,7 @@ import {
   Box,
   Button,
   Modal,
+  Chip,
 } from "@mui/material";
 
 const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
@@ -19,6 +20,7 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const MovieDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [trailerKey, setTrailerKey] = useState("");
   const [loading, setLoading] = useState(true);
@@ -87,48 +89,130 @@ const MovieDetails = () => {
   }
 
   return (
-    <Box p={4} maxWidth="800px" mx="auto">
-      <Card sx={{ boxShadow: 3 }}>
-        <Grid container spacing={3}>
-          {/* Movie Poster */}
-          <Grid item xs={12} sm={4}>
-            <CardMedia
-              component="img"
-              image={
-                movie.poster_path
-                  ? `${IMAGE_BASE_URL}${movie.poster_path}`
-                  : "https://via.placeholder.com/500"
-              }
-              alt={movie.title}
-              sx={{ borderRadius: "10px", height: "100%" }}
-            />
-          </Grid>
+    <Box
+      sx={{
+        position: "relative",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: `url(${IMAGE_BASE_URL}${movie.backdrop_path}) center/cover no-repeat`,
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backdropFilter: "blur(10px)", // Blurry background effect
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 2,
+          maxWidth: "900px",
+          width: "90%",
+          p: 4,
+          borderRadius: "12px",
+          backdropFilter: "blur(15px)", // Blurry effect on movie details card
+          backgroundColor: "rgba(255, 255, 255, 0.1)", // Transparent white
+          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
+        }}
+      >
+        {/* Go Back Button */}
+        <Button
+          variant="contained"
+          sx={{
+            mb: 2,
+            backgroundColor: "#ff9800", // Orange color
+            color: "white",
+            "&:hover": { backgroundColor: "#e68900" },
+          }}
+          onClick={() => navigate(-1)}
+        >
+          ⬅️ Go Back
+        </Button>
 
-          {/* Movie Details */}
-          <Grid item xs={12} sm={8}>
-            <CardContent>
-              <Typography variant="h4" fontWeight="bold" gutterBottom>
-                {movie.title}
-              </Typography>
-              <Typography variant="body1" color="textSecondary" gutterBottom>
-                {movie.overview || "No description available."}
-              </Typography>
+        <Card
+          sx={{
+            boxShadow: 3,
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            borderRadius: "10px",
+          }}
+        >
+          <Grid container spacing={3}>
+            {/* Movie Poster */}
+            <Grid item xs={12} sm={4}>
+              <CardMedia
+                component="img"
+                image={
+                  movie.poster_path
+                    ? `${IMAGE_BASE_URL}${movie.poster_path}`
+                    : "https://via.placeholder.com/500"
+                }
+                alt={movie.title}
+                sx={{ borderRadius: "10px", height: "100%" }}
+              />
+            </Grid>
 
-              {/* Play Trailer Button */}
-              {trailerKey && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ mt: 2 }}
-                  onClick={() => setOpen(true)}
+            {/* Movie Details */}
+            <Grid item xs={12} sm={8}>
+              <CardContent>
+                <Typography
+                  variant="h4"
+                  fontWeight="bold"
+                  color="white"
+                  gutterBottom
                 >
-                  Play Trailer
-                </Button>
-              )}
-            </CardContent>
+                  {movie.title}
+                </Typography>
+                <Typography variant="body1" color="white" gutterBottom>
+                  {movie.overview || "No description available."}
+                </Typography>
+
+                {/* Genre & Rating */}
+                <Box mt={2} display="flex" flexWrap="wrap" gap={1}>
+                  <Chip
+                    label={`⭐ ${movie.vote_average.toFixed(1)}`}
+                    color="primary"
+                  />
+                  <Chip
+                    label={`📅 ${movie.release_date}`}
+                    sx={{ backgroundColor: "#ff9800", color: "white" }}
+                  />
+                  {movie.genres?.map((genre) => (
+                    <Chip
+                      key={genre.id}
+                      label={genre.name}
+                      variant="outlined"
+                      sx={{ color: "white", borderColor: "white" }}
+                    />
+                  ))}
+                </Box>
+
+                {/* Play Trailer Button */}
+                {trailerKey && (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      mt: 2,
+                      backgroundColor: "#007bff",
+                      color: "white",
+                      "&:hover": { backgroundColor: "#0056b3" },
+                    }}
+                    onClick={() => setOpen(true)}
+                  >
+                    Play Trailer
+                  </Button>
+                )}
+              </CardContent>
+            </Grid>
           </Grid>
-        </Grid>
-      </Card>
+        </Card>
+      </Box>
 
       {/* Trailer Modal */}
       <Modal open={open} onClose={() => setOpen(false)}>
