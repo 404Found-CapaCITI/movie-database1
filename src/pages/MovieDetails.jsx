@@ -13,6 +13,14 @@ import {
   Modal,
   Chip,
 } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faStar,
+  faCalendarDays,
+  faPlay,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 
 const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
@@ -127,13 +135,14 @@ const MovieDetails = () => {
           variant="contained"
           sx={{
             mb: 2,
-            backgroundColor: "#ff9800", // Orange color
+            backgroundColor: "#ff9800",
             color: "white",
             "&:hover": { backgroundColor: "#e68900" },
           }}
           onClick={() => navigate(-1)}
         >
-          ⬅️ Go Back
+          <FontAwesomeIcon icon={faArrowLeft} style={{ marginRight: "8px" }} />
+          Go Back
         </Button>
 
         <Card
@@ -176,13 +185,27 @@ const MovieDetails = () => {
                 {/* Genre & Rating */}
                 <Box mt={2} display="flex" flexWrap="wrap" gap={1}>
                   <Chip
-                    label={`⭐ ${movie.vote_average.toFixed(1)}`}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faStar}
+                        style={{ color: "yellow" }}
+                      />
+                    }
+                    label={movie.vote_average.toFixed(1)}
                     color="primary"
                   />
+
                   <Chip
-                    label={`📅 ${movie.release_date}`}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faCalendarDays}
+                        style={{ color: "white" }}
+                      />
+                    }
+                    label={movie.release_date}
                     sx={{ backgroundColor: "#ff9800", color: "white" }}
                   />
+
                   {movie.genres?.map((genre) => (
                     <Chip
                       key={genre.id}
@@ -199,12 +222,16 @@ const MovieDetails = () => {
                     variant="contained"
                     sx={{
                       mt: 2,
-                      backgroundColor: "#007bff",
+                      backgroundColor: "#ff0000",
                       color: "white",
-                      "&:hover": { backgroundColor: "#0056b3" },
+                      "&:hover": { backgroundColor: "#cc0000" },
                     }}
                     onClick={() => setOpen(true)}
                   >
+                    <FontAwesomeIcon
+                      icon={faYoutube}
+                      style={{ marginRight: "8px" }}
+                    />
                     Play Trailer
                   </Button>
                 )}
