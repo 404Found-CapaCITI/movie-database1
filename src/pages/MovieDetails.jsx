@@ -22,9 +22,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 
-const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
-const TMDB_BASE_URL = "https://api.themoviedb.org/3";
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+VITE_TMDB_API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
+VITE_TMDB_BASE_URL = "https://api.themoviedb.org/3";
+VITE_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+VITE_YOUTUBE_API_KEY = "AIzaSyBBxLIFH7rKS5wDskp9UapVceh08Wpyln0";
+VITE_TMDB_SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
 
 const MovieDetails = () => {
   const { id } = useParams();
