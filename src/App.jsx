@@ -1,17 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MovieList from "./pages/MovieList"; // Your main page
-import MovieDetails from "./pages/MovieDetails"; // Movie details page
+import { Routes, Route } from "react-router-dom";
+import Home from "./pages/HomePage";
+import MovieDetails from "./pages/MovieDetails"; // ✅ Ensure this file exists
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MovieList />} />
-        <Route path="/movie/:id" element={<MovieDetails />} />{" "}
-        {/* ✅ Route for Movie Details */}
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/movie/:id" element={<MovieDetails />} />{" "}
+      {/* ✅ Uncommented */}
+    </Routes>
   );
-}
+};
 
 export default App;
