@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/HomePage";
-import MovieDetails from "./pages/MovieDetails"; // ✅ Ensure this file exists
+import HomePage from "./pages/HomePage"; // Ensure the import matches the filename
+import MovieDetails from "./pages/MovieDetails";
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/movie/:id" element={<MovieDetails />} />{" "}
-      {/* ✅ Uncommented */}
+      <Route path="/" element={<HomePage />} />
+      <Route path="/movie/:id" element={<MovieDetails />} />
     </Routes>
   );
 };
