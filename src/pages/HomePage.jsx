@@ -123,10 +123,15 @@ const HomePage = () => {
           </div>
 
           <div className="flex justify-center mt-8">
-            <Button isLoading={isLoading} onPress={loadMore}>
-              Load more
-            </Button> 
-          </div>
+  <Button 
+    isLoading={isLoading} 
+    onPress={loadMore}
+    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+  >
+    Load More
+  </Button>
+</div>
+
         </MainLayout>
       </div>
     </div>
