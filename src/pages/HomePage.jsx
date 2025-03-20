@@ -80,7 +80,7 @@ const HomePage = () => {
   const handleSearch = (term) => {
     setSearchTerm(term);
     setCurrentPage(1);
-    setMovieData([]);
+    setMovieData([]); // Reset movie list when searching
   };
 
   const handleGenreChange = (genre) => {
