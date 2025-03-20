@@ -1,18 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Button, Spinner } from "@nextui-org/react";
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Grid,
+  CircularProgress,
+  Box,
+  Button,
+  Modal,
+} from "@mui/material";
 
 const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-const YOUTUBE_API_KEY = "AIzaSyBBxLIFH7rKS5wDskp9UapVceh08Wpyln0";
 
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [trailerKey, setTrailerKey] = useState("");
   const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false); // For modal
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -28,82 +38,135 @@ const MovieDetails = () => {
       }
     };
 
-    if (id) {
-      fetchMovieDetails();
-    }
-  }, [id]); // ✅ Correct dependency array
-
-  useEffect(() => {
     const fetchMovieTrailer = async () => {
-      if (!movie) return;
-
       try {
         const response = await axios.get(
-          `https://www.googleapis.com/youtube/v3/search`,
+          `${TMDB_BASE_URL}/movie/${id}/videos`,
           {
-            params: {
-              key: YOUTUBE_API_KEY,
-              q: `${movie.title} official trailer`,
-              part: "snippet",
-              type: "video",
-              maxResults: 1,
-            },
+            params: { api_key: API_KEY },
           }
         );
 
-        if (response.data.items.length > 0) {
-          setTrailerKey(response.data.items[0].id.videoId);
+        const trailers = response.data.results.filter(
+          (video) => video.type === "Trailer" && video.site === "YouTube"
+        );
+
+        if (trailers.length > 0) {
+          setTrailerKey(trailers[0].key);
         }
       } catch (error) {
-        console.error("Error fetching trailer:", error);
+        console.error("Error fetching movie trailer:", error);
       }
     };
 
-    if (movie) {
+    if (id) {
+      fetchMovieDetails();
       fetchMovieTrailer();
     }
-  }, [movie]); // ✅ Fix: Correct dependency array
+  }, [id]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Spinner size="lg" color="secondary" />
-      </div>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress color="secondary" />
+      </Box>
     );
   }
 
   if (!movie) {
-    return <p className="text-center text-red-500">Movie not found.</p>;
+    return (
+      <Typography variant="h6" color="error" align="center" sx={{ mt: 4 }}>
+        Movie not found.
+      </Typography>
+    );
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">{movie.title}</h1>
-      <img
-        src={movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : ""}
-        alt={movie.title}
-        className="rounded-lg shadow-lg mb-4"
-      />
-      <p className="text-lg">{movie.overview}</p>
+    <Box p={4} maxWidth="800px" mx="auto">
+      <Card sx={{ boxShadow: 3 }}>
+        <Grid container spacing={3}>
+          {/* Movie Poster */}
+          <Grid item xs={12} sm={4}>
+            <CardMedia
+              component="img"
+              image={
+                movie.poster_path
+                  ? `${IMAGE_BASE_URL}${movie.poster_path}`
+                  : "https://via.placeholder.com/500"
+              }
+              alt={movie.title}
+              sx={{ borderRadius: "10px", height: "100%" }}
+            />
+          </Grid>
 
-      {trailerKey ? (
-        <div className="mt-6">
-          <h3 className="text-2xl font-semibold mb-2">Watch Trailer</h3>
-          <iframe
-            width="560"
-            height="315"
-            src={`https://www.youtube.com/embed/${trailerKey}`}
-            title="YouTube Trailer"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="rounded-lg shadow-lg"
-          ></iframe>
-        </div>
-      ) : (
-        <p className="text-gray-500 mt-4">No trailer available</p>
-      )}
-    </div>
+          {/* Movie Details */}
+          <Grid item xs={12} sm={8}>
+            <CardContent>
+              <Typography variant="h4" fontWeight="bold" gutterBottom>
+                {movie.title}
+              </Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                {movie.overview || "No description available."}
+              </Typography>
+
+              {/* Play Trailer Button */}
+              {trailerKey && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                  onClick={() => setOpen(true)}
+                >
+                  Play Trailer
+                </Button>
+              )}
+            </CardContent>
+          </Grid>
+        </Grid>
+      </Card>
+
+      {/* Trailer Modal */}
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80%",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 2,
+            borderRadius: "10px",
+          }}
+        >
+          {trailerKey ? (
+            <iframe
+              width="100%"
+              height="400"
+              src={`https://www.youtube.com/embed/${trailerKey}`}
+              title="YouTube Trailer"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{
+                borderRadius: "10px",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+              }}
+            ></iframe>
+          ) : (
+            <Typography variant="body1" color="textSecondary" align="center">
+              No trailer available.
+            </Typography>
+          )}
+        </Box>
+      </Modal>
+    </Box>
   );
 };
 
