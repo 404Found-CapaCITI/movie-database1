@@ -4,12 +4,21 @@ import { MainLayout } from "../components/MainLayout";
 import Navbar from "../components/Navbar";
 import MovieList from "../components/MovieList";
 import HeroCarousel from "../components/HeroCarousel";
-import GenreFilter from "../components/GenreFilter";
-import SearchBar from "../components/SearchBar";
 import axios from "axios";
+import SearchBar from "../components/SearchBar"; // Ensure SearchBar is imported
 
-const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";  
-const BASE_URL = "https://api.themoviedb.org/3/discover/movie";
+const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
+const DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie";
+const SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
+
+const populateHeroCarouselData = (movieList) => {
+  return movieList.slice(0, 10).map((movie) => ({
+    movieId: movie.id,
+    movieName: movie.original_title,
+    movieDescription: movie.overview,
+    backdropPath: movie.backdrop_path,
+  }));
+};
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -18,60 +27,79 @@ const HomePage = () => {
   const [movieData, setMovieData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [firstRender, setFirstRender] = useState(true);
+  const [slideData, setSlideData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    // Fetch movie data whenever search term, category, or sortBy changes
     const fetchMovies = async () => {
       setIsLoading(true);
 
       try {
-        const response = await axios.get(BASE_URL, {
+        const URL = searchTerm ? SEARCH_URL : DISCOVER_URL;
+        const response = await axios.get(URL, {
           params: {
             api_key: API_KEY,
-            sort_by: sortBy,
-            query: searchTerm,
-            with_genres: category === "All Genres" ? "" : category,
-            page: 1,
+            query: searchTerm || undefined, // Only include query if searching
+            sort_by: searchTerm ? undefined : sortBy, // Sorting only applies when not searching
+            with_genres: searchTerm || category === "All Genres" ? undefined : category,
+            page: currentPage,
           },
         });
-        setMovieData(response.data.results);
-        setIsLoading(false);
+
+        if (currentPage === 1) {
+          setMovieData(response.data.results);
+        } else {
+          setMovieData((prevData) => [...prevData, ...response.data.results]);
+        }
+
+        if (firstRender && response.data.results?.length > 0) {
+          setFirstRender(false);
+          setSlideData(populateHeroCarouselData(response.data.results));
+        }
       } catch (error) {
         console.error("Error fetching movies", error);
+      } finally {
         setIsLoading(false);
       }
     };
 
     fetchMovies();
-  }, [searchTerm, category, sortBy]);  // Dependency array: trigger fetch on searchTerm, category, or sortBy change
+  }, [searchTerm, category, sortBy, currentPage]);
 
   const handleSearch = (term) => {
     setSearchTerm(term);
+    setCurrentPage(1);
+    setMovieData([]);
   };
 
   const handleGenreChange = (genre) => {
     setCategory(genre);
+    setCurrentPage(1);
+    setMovieData([]);
+  };
+
+  const loadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   return (
     <div>
-      <Navbar />
+      <Navbar 
+        searchTerm={searchTerm}
+        setSearchTerm={handleSearch}
+        category={category}
+        setCategory={handleGenreChange}
+        setSortBy={setSortBy}
+      />
+      <SearchBar searchTerm={searchTerm} setSearchTerm={handleSearch} />
       <div className="main-content">
         <MainLayout
           hero={
-            <HeroCarousel
-              slideList={movieData.slice(0, 10)}  
-              isLoading={isLoading && firstRender}
-            />
+            <HeroCarousel slideList={slideData} isLoading={isLoading && firstRender} />
           }
         >
           <div className="flex justify-between items-center mb-8">
             <h1 className="font-bold text-4xl">Discover Movies</h1>
-          </div>
-
-          <div className="flex gap-4 mb-8">
-            <SearchBar searchTerm={searchTerm} setSearchTerm={handleSearch} />
-            <GenreFilter category={category} setCategory={handleGenreChange} />
           </div>
 
           {isLoading && (
@@ -81,13 +109,13 @@ const HomePage = () => {
           )}
 
           <div className="flex flex-col gap-y-8">
-            {movieData.length > 0 && (
-              <MovieList movieList={movieData} />
-            )}
+            {movieData.length > 0 && <MovieList movieList={movieData} />}
           </div>
 
           <div className="flex justify-center mt-8">
-            <Button onPress={() => {}}>Load more</Button> 
+            <Button isLoading={isLoading} onPress={loadMore}>
+              Load more
+            </Button> 
           </div>
         </MainLayout>
       </div>
