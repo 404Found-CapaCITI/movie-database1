@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/HomePage.jsx";
-import MovieDetails from "./pages/MovieDetails.jsx"; // ✅ Uncommented to use in routing
+import Home from "../pages/HomePage.jsx";
+import MovieDetails from "../pages/MovieDetails.jsx"; // ✅ Uncommented to use in routing
 
 const App = () => {
   return (
