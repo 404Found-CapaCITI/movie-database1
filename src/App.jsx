@@ -1,14 +1,17 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/HomePage";
-// import MovieDetails from "./pages/MovieDetails.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MovieList from "./pages/MovieList"; // Your main page
+import MovieDetails from "./pages/MovieDetails"; // Movie details page
 
-const App = () => {
+function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      {/* <Route path="/movie/:id" element={<MovieDetails />} /> */}
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MovieList />} />
+        <Route path="/movie/:id" element={<MovieDetails />} />{" "}
+        {/* ✅ Route for Movie Details */}
+      </Routes>
+    </Router>
   );
-};
+}
 
 export default App;
