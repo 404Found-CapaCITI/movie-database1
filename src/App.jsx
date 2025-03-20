@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/HomePage.jsx";
-// import MovieDetails from "./pages/MovieDetails.jsx";
-
+import HomePage from "./pages/HomePage"; // Ensure the import matches the filename
+import MovieDetails from "./pages/MovieDetails";
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      {/* <Route path="/movie/:id" element={<MovieDetails />} /> */}
+      <Route path="/" element={<HomePage />} />
+      <Route path="/movie/:id" element={<MovieDetails />} />
     </Routes>
   );
 };
