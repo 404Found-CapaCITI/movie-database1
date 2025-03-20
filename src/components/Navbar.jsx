@@ -7,8 +7,11 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
   const [visible, setVisible] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
+  // Handle dark mode toggle
   const handleDarkModeToggle = () => {
-    setDarkMode(!darkMode);
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem("darkMode", newDarkMode); // Save to localStorage
   };
 
   const handleScroll = useCallback(() => {
@@ -19,6 +22,18 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
     }
     setPrevScrollY(window.scrollY);
   }, [prevScrollY]);
+
+  useEffect(() => {
+    // Load darkMode preference from localStorage on initial load
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(savedDarkMode);
+
+    if (savedDarkMode) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  }, []);
 
   useEffect(() => {
     if (darkMode) {
