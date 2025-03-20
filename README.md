@@ -100,6 +100,3 @@ Copy
 2. **Copy the above content** and paste it into the `README.md` file.
 3. **Save the file**.
 
-That's it! Now your README is ready, and anyone can easily follow it to understand the project, set it up, and contribute. Let me know if you need further assistance!
-
-
