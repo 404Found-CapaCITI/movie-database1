@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { FaSearch, FaSun, FaMoon } from "react-icons/fa"; 
-import "./navbar.css";
+import { FaSearch, FaSun, FaMoon } from "react-icons/fa";
+import "./Navbar.css";
 
 const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
   const [prevScrollY, setPrevScrollY] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
 
+  // Handle dark mode toggle
   const handleDarkModeToggle = () => {
-    setDarkMode(!darkMode);
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem("darkMode", newDarkMode); // Save to localStorage
   };
 
   const handleScroll = useCallback(() => {
@@ -19,6 +22,20 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
     }
     setPrevScrollY(window.scrollY);
   }, [prevScrollY]);
+
+  useEffect(() => {
+    // Load darkMode preference from localStorage on initial load
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+
+    // Set darkMode to either the saved value or default to true (dark mode)
+    setDarkMode(savedDarkMode !== null ? savedDarkMode : true);
+
+    if (savedDarkMode !== null ? savedDarkMode : true) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+  }, []); // This effect runs once on component mount
 
   useEffect(() => {
     if (darkMode) {
