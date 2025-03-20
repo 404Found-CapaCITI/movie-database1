@@ -13,11 +13,12 @@ const SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";  // TMDb image URL
 
 const populateHeroCarouselData = (movieList) => {
-  return movieList.slice(0, 10).map((movie) => ({
+  const filteredMovies = movieList.filter(movie => movie.backdrop_path); // Ensure it has an image
+  return filteredMovies.slice(0, 10).map((movie) => ({
     movieId: movie.id,
     movieName: movie.original_title,
     movieDescription: movie.overview,
-    backdropPath: movie.backdrop_path ? `${IMAGE_BASE_URL}${movie.backdrop_path}` : null, // Full backdrop URL
+    backdropPath: `${IMAGE_BASE_URL}${movie.backdrop_path}`,
   }));
 };
 
@@ -47,10 +48,13 @@ const HomePage = () => {
           },
         });
 
-        const moviesWithImages = response.data.results.map((movie) => ({
-          ...movie,
-          posterPath: movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : null, // Full poster URL
-        }));
+        // Filter out movies without poster images
+        const moviesWithImages = response.data.results
+          .filter(movie => movie.poster_path) // Ensure only movies with a poster are included
+          .map(movie => ({
+            ...movie,
+            posterPath: `${IMAGE_BASE_URL}${movie.poster_path}`,
+          }));
 
         if (currentPage === 1) {
           setMovieData(moviesWithImages);
