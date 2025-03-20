@@ -47,6 +47,11 @@ const HomePage = () => {
             page: currentPage,
           },
         });
+        const toggleTheme = () => {
+          const newTheme = theme === "light" ? "dark" : "light"; // Toggle between light and dark
+          setTheme(newTheme); // Update the theme in state
+          localStorage.setItem("theme", newTheme); // Save the new theme to localStorage
+        };
 
         // Filter out movies without poster images
         const moviesWithImages = response.data.results
