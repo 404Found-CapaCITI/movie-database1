@@ -5,18 +5,19 @@ import Navbar from "../components/Navbar";
 import MovieList from "../components/MovieList";
 import HeroCarousel from "../components/HeroCarousel";
 import axios from "axios";
-import SearchBar from "../components/SearchBar"; // Ensure SearchBar is imported
+import SearchBar from "../components/SearchBar"; 
 
 const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
 const DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie";
 const SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";  // TMDb image URL
 
 const populateHeroCarouselData = (movieList) => {
   return movieList.slice(0, 10).map((movie) => ({
     movieId: movie.id,
     movieName: movie.original_title,
     movieDescription: movie.overview,
-    backdropPath: movie.backdrop_path,
+    backdropPath: movie.backdrop_path ? `${IMAGE_BASE_URL}${movie.backdrop_path}` : null, // Full backdrop URL
   }));
 };
 
@@ -39,22 +40,27 @@ const HomePage = () => {
         const response = await axios.get(URL, {
           params: {
             api_key: API_KEY,
-            query: searchTerm || undefined, // Only include query if searching
-            sort_by: searchTerm ? undefined : sortBy, // Sorting only applies when not searching
+            query: searchTerm || undefined, 
+            sort_by: searchTerm ? undefined : sortBy, 
             with_genres: searchTerm || category === "All Genres" ? undefined : category,
             page: currentPage,
           },
         });
 
+        const moviesWithImages = response.data.results.map((movie) => ({
+          ...movie,
+          posterPath: movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : null, // Full poster URL
+        }));
+
         if (currentPage === 1) {
-          setMovieData(response.data.results);
+          setMovieData(moviesWithImages);
         } else {
-          setMovieData((prevData) => [...prevData, ...response.data.results]);
+          setMovieData((prevData) => [...prevData, ...moviesWithImages]);
         }
 
-        if (firstRender && response.data.results?.length > 0) {
+        if (firstRender && moviesWithImages.length > 0) {
           setFirstRender(false);
-          setSlideData(populateHeroCarouselData(response.data.results));
+          setSlideData(populateHeroCarouselData(moviesWithImages));
         }
       } catch (error) {
         console.error("Error fetching movies", error);
