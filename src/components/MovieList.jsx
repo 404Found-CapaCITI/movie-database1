@@ -1,17 +1,17 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 const MovieList = ({ movieList }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {movieList.map((movie) => (
-        <div key={movie.id} className="movie-card text-center">
+        <Link key={movie.id} to={`/movie/${movie.id}`} className="movie-item">
           <img
-            src={movie.posterPath || "/placeholder.jpg"} 
-            alt={movie.original_title}
+            src={movie.posterPath}
+            alt={movie.title}
             className="w-full h-auto rounded-lg shadow-lg"
           />
-          <h2 className="mt-2 font-semibold">{movie.original_title}</h2>
-        </div>
+          <h3 className="text-lg font-bold mt-2">{movie.title}</h3>
+        </Link>
       ))}
     </div>
   );
