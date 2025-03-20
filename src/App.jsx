@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage.jsx";
-// import MovieDetails from "./pages/MovieDetails.jsx";
-
+import MovieDetails from "./pages/MovieDetails.jsx"; // ✅ Uncommented to use in routing
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      {/* <Route path="/movie/:id" element={<MovieDetails />} /> */}
+      <Route path="/movie/:id" element={<MovieDetails />} />{" "}
+      {/* ✅ Fixed routing */}
     </Routes>
   );
 };
