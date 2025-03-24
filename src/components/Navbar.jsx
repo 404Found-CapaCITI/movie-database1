@@ -5,13 +5,12 @@ import "./Navbar.css";
 const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
   const [prevScrollY, setPrevScrollY] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [darkMode, setDarkMode] = useState(true); // Default to dark mode
+  const [darkMode, setDarkMode] = useState(true);
 
-  // Handle dark mode toggle
   const handleDarkModeToggle = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    localStorage.setItem("darkMode", newDarkMode); // Save to localStorage
+    localStorage.setItem("darkMode", newDarkMode); 
   };
 
   const handleScroll = useCallback(() => {
@@ -24,20 +23,19 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
   }, [prevScrollY]);
 
   useEffect(() => {
-    // Load darkMode preference from localStorage on initial load
-    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+    
+    const savedDarkMode = localStorage.getItem("darkMode") === "true"; 
+    setDarkMode(savedDarkMode);
 
-    // Set darkMode to either the saved value or default to true (dark mode)
-    setDarkMode(savedDarkMode !== null ? savedDarkMode : true);
-
-    if (savedDarkMode !== null ? savedDarkMode : true) {
+    if (savedDarkMode) {
       document.body.classList.add("dark-mode");
     } else {
       document.body.classList.remove("dark-mode");
     }
-  }, []); // This effect runs once on component mount
+  }, []); 
 
   useEffect(() => {
+    
     if (darkMode) {
       document.body.classList.add("dark-mode");
     } else {
@@ -46,6 +44,7 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
   }, [darkMode]);
 
   useEffect(() => {
+   
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -55,7 +54,8 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
   return (
     <div className={`navbar ${visible ? "visible" : "hidden"}`}>
       <div className="logo">
-        <h2>404 Found</h2>
+        {/* Apply dark mode styles to the movie title */}
+        <h2 className="font-bold text-xl text-black dark:text-white">404 Found</h2> {/* Movie title */}
       </div>
 
       <div className="search-category">
