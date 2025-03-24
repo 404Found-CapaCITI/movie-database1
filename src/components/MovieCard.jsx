@@ -7,11 +7,11 @@ const BASE_TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/";
 const MOVIE_POSTER_SIZE = "w500";
 
 const MovieCard = ({ id, name, posterPath, releaseDate, vote }) => {
-  if (!id) return null; // ✅ Ensures id exists before rendering
+  if (!id) return null;
 
   return (
-    <div className="w-full">
-      <div className="relative w-full h-64 mb-3 overflow-hidden rounded-lg shadow-lg transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-violet-500/50">
+    <div className="movie-card">
+      <div className="movie-card-image">
         <img
           src={
             posterPath
@@ -19,24 +19,19 @@ const MovieCard = ({ id, name, posterPath, releaseDate, vote }) => {
               : "https://static.vecteezy.com/system/resources/previews/016/916/479/original/placeholder-icon-design-free-vector.jpg"
           }
           alt={`${name} poster`}
-          className="w-full h-full object-cover"
           loading="eager"
         />
-        {/* Blurred Footer Overlay */}
-        <div className="absolute bottom-0 left-0 right-0 bg-black/40 backdrop-blur-2xl text-white flex justify-between items-center px-4 py-3">
-          <span className="flex items-center gap-1 bg-orange-800 px-2 py-1 rounded-full text-sm font-semibold">
-            <FaStar size={14} className="text-white" />
+        <div className="movie-card-overlay">
+          <span className="movie-card-rating">
+            <FaStar size={14} className="star-icon" />
             {vote}
           </span>
-
-          {/* Release Date */}
-          <span className="text-sm font-medium">
+          <span className="movie-card-date">
             {releaseDate ? dayjs(releaseDate).format("MMM YYYY") : "Unknown date"}
           </span>
         </div>
       </div>
-      {/* Movie Title */}
-      <p className="font-medium text-lg text-black dark:text-white text-center">{name}</p>
+      <p className="movie-card-title">{name}</p>
     </div>
   );
 };
