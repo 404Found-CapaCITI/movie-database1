@@ -113,7 +113,7 @@ const MovieDetails = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          backdropFilter: "blur(10px)", // Blurry background effect
+          backdropFilter: "blur(10px)",
           backgroundColor: "rgba(0, 0, 0, 0.7)",
         },
       }}
@@ -126,8 +126,8 @@ const MovieDetails = () => {
           width: "90%",
           p: 4,
           borderRadius: "12px",
-          backdropFilter: "blur(15px)", // Blurry effect on movie details card
-          backgroundColor: "rgba(255, 255, 255, 0.1)", // Transparent white
+          backdropFilter: "blur(15px)",
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
           boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
         }}
       >
@@ -136,7 +136,7 @@ const MovieDetails = () => {
           variant="contained"
           sx={{
             mb: 2,
-            backgroundColor: "#ff9800",
+            backgroundColor: "#warning",
             color: "white",
             "&:hover": { backgroundColor: "#e68900" },
           }}
@@ -187,13 +187,15 @@ const MovieDetails = () => {
                 <Box mt={2} display="flex" flexWrap="wrap" gap={1}>
                   <Chip
                     icon={
-                      <FontAwesomeIcon
-                        icon={faStar}
-                        style={{ color: "yellow" }}
-                      />
+                      <FontAwesomeIcon icon={faStar} style={{ color: "red" }} />
                     }
                     label={movie.vote_average.toFixed(1)}
-                    color="primary"
+                    sx={{
+                      backgroundColor: "#ff9800",
+                      color: "white", // White text
+                      "& .MuiChip-icon": { color: "white" },
+                      "&:hover": { backgroundColor: "#e68900" }, // Darker orange on hover
+                    }}
                   />
 
                   <Chip
