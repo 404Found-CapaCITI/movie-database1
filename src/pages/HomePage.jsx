@@ -7,10 +7,13 @@ import HeroCarousel from "../components/HeroCarousel";
 import axios from "axios";
 import SearchBar from "../components/SearchBar";
 
-const API_KEY = "05c0d8143a45b7ef5afd85d20acdce23";
-const DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie";
-const SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"; // TMDb image URL
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
+const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+const YOUTUBE_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
+const TMDB_SEARCH_URL = import.meta.env.VITE_TMDB_SEARCH_URL;
+
+const DISCOVER_URL = `${TMDB_BASE_URL}/discover/movie`;
 
 const populateHeroCarouselData = (movieList) => {
   const filteredMovies = movieList.filter((movie) => movie.backdrop_path); // Ensure it has an image
@@ -35,10 +38,10 @@ const HomePage = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
-  
+
       try {
-        const URL = searchTerm ? SEARCH_URL : DISCOVER_URL;
-  
+        const URL = searchTerm ? TMDB_SEARCH_URL : DISCOVER_URL;
+
         // Set parameters for the request
         const params = {
           api_key: API_KEY,
@@ -46,14 +49,14 @@ const HomePage = () => {
           sort_by: searchTerm ? undefined : sortBy,
           page: currentPage,
         };
-  
+
         // Only add `with_genres` if the category is not "All Genres"
         if (category !== "All Genres") {
           params.with_genres = category;
         }
-  
+
         const response = await axios.get(URL, { params });
-  
+
         // Filter out movies without poster images
         const moviesWithImages = response.data.results
           .filter((movie) => movie.poster_path) // Ensure only movies with a poster are included
@@ -61,7 +64,7 @@ const HomePage = () => {
             ...movie,
             posterPath: `${IMAGE_BASE_URL}${movie.poster_path}`,
           }));
-  
+
         // If it's the first page (initial load), reset movieData to only the new movies
         if (currentPage === 1) {
           setMovieData(moviesWithImages);
@@ -69,7 +72,7 @@ const HomePage = () => {
           // Otherwise, append new data to the existing list
           setMovieData((prevData) => [...prevData, ...moviesWithImages]);
         }
-  
+
         // Set the slide data for the hero carousel (only the first time movies are loaded)
         if (firstRender && moviesWithImages.length > 0) {
           setFirstRender(false);
@@ -81,10 +84,10 @@ const HomePage = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchMovies();
   }, [searchTerm, category, sortBy, currentPage, firstRender]);
-  
+
   const handleSearch = (term) => {
     setSearchTerm(term);
     setCurrentPage(1);
