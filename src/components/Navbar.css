@@ -118,6 +118,13 @@
   body.dark-mode .navbar {
     background-color: #121212;
   }
+
+  body.dark-mode .movie-card-title {
+    font-size: 17px;
+    font-weight: bold;
+    color: #e0e0e0;
+    margin-top: 8px;
+  }
   
   @media (max-width: 768px) {
     .navbar {
