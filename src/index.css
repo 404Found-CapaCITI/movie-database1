@@ -215,3 +215,61 @@
 .movie-list-item {
   text-decoration: none;
 }
+
+.footer {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+  bottom: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.footer-content {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-icon {
+  font-size: 1.5rem;
+  color: white;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-icon:hover {
+  color: #cc5500;
+  transform: scale(1.1);
+}
+
+.footer-text {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-top: 10px;
+}
