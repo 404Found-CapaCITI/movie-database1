@@ -88,15 +88,8 @@ User Authentication: Add user login functionality to allow users to create watch
 Reviews and Ratings: Implement a feature that lets users leave reviews and rate movies.
 Offline Mode: Implement caching so that users can browse movies even without an active internet connection.
 Trending Movies: Include a section that highlights the trending movies of the week/month.
+
+
 License
 This project is licensed under the MIT License – see the LICENSE file for details.
-
-markdown
-Copy
-
-### Steps:
-
-1. **Create the `README.md` file** in your project root directory.
-2. **Copy the above content** and paste it into the `README.md` file.
-3. **Save the file**.
 
