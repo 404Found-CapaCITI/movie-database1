@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 import { MainLayout } from "../components/MainLayout";
 import Navbar from "../components/Navbar";
 import MovieList from "../components/MovieList";
@@ -7,6 +7,7 @@ import HeroCarousel from "../components/HeroCarousel";
 import axios from "axios";
 import SearchBar from "../components/SearchBar";
 import Footer from "../components/Footer";
+import { Button } from "@mui/material";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
