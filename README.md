@@ -68,14 +68,14 @@ NEXT_PUBLIC_API_KEY=your_tmdb_api_key
 Replace your_tmdb_api_key with your actual TMDb API key. You can obtain it from TMDb's API page.
 
 ### Usage
-Search for Movies: Type the movie title in the search bar and hit Enter to search.
+Search for Movies: Type the movie title in the search bar to search.
 Filter by Genre: Use the genre dropdown to filter movies by categories like Action, Comedy, Horror, etc.
 Toggle Theme: Use the sun/moon icon in the navbar to toggle between dark and light themes.
 Infinite Scroll: Scroll down the page to load more movies automatically.
 
 ### Group Members
 ** Member 1: Mpho
-** Member 2: Nosiphp
+** Member 2: Nosipho
 ** Member 3: Isabella
 ** Member 4: Pelma
 
