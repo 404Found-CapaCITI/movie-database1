@@ -6,7 +6,11 @@ import MovieList from "../components/MovieList";
 import HeroCarousel from "../components/HeroCarousel";
 import axios from "axios";
 import SearchBar from "../components/SearchBar";
+<<<<<<< HEAD
 import { Button } from "@mui/material";
+=======
+import Footer from "../components/Footer"
+>>>>>>> c61f96a7b26818e7b3cc9f7f89962d0ef7899f71
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
@@ -148,6 +152,7 @@ const HomePage = () => {
           </div>
         </MainLayout>
       </div>
+      <Footer></Footer>
     </div>
   );
 };
