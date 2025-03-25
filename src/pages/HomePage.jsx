@@ -6,7 +6,7 @@ import MovieList from "../components/MovieList";
 import HeroCarousel from "../components/HeroCarousel";
 import axios from "axios";
 import SearchBar from "../components/SearchBar";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
@@ -140,9 +140,13 @@ const HomePage = () => {
 
           <div className="flex justify-center mt-8">
             <Button
-              isLoading={isLoading}
+              variant="contained"
+              color="warning"
+              sx={{
+                "&:hover": { backgroundColor: "#e68900" },
+                textTransform: "none",
+              }}
               onPress={loadMore}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
             >
               Load More
             </Button>
