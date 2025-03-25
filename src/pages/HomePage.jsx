@@ -1,38 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { Spinner } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import { MainLayout } from "../components/MainLayout";
 import Navbar from "../components/Navbar";
 import MovieList from "../components/MovieList";
 import HeroCarousel from "../components/HeroCarousel";
 import axios from "axios";
 import SearchBar from "../components/SearchBar";
-<<<<<<< HEAD
-import { Button } from "@mui/material";
-=======
-import Footer from "../components/Footer"
->>>>>>> c61f96a7b26818e7b3cc9f7f89962d0ef7899f71
+import Footer from "../components/Footer";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = import.meta.env.VITE_TMDB_BASE_URL;
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+const YOUTUBE_API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
 const TMDB_SEARCH_URL = import.meta.env.VITE_TMDB_SEARCH_URL;
+
 const DISCOVER_URL = `${TMDB_BASE_URL}/discover/movie`;
 
 const populateHeroCarouselData = (movieList) => {
-  return movieList
-    .filter((movie) => movie.backdrop_path)
-    .slice(0, 10)
-    .map((movie) => ({
-      movieId: movie.id,
-      movieName: movie.original_title,
-      movieDescription: movie.overview,
-      backdropPath: `${IMAGE_BASE_URL}${movie.backdrop_path}`,
-    }));
+  const filteredMovies = movieList.filter((movie) => movie.backdrop_path); // Ensure it has an image
+  return filteredMovies.slice(0, 10).map((movie) => ({
+    movieId: movie.id,
+    movieName: movie.original_title,
+    movieDescription: movie.overview,
+    backdropPath: `${IMAGE_BASE_URL}${movie.backdrop_path}`,
+  }));
 };
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState(null); // Store genre ID, not name
+  const [category, setCategory] = useState("All Genres");
   const [sortBy, setSortBy] = useState("popularity.desc");
   const [movieData, setMovieData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +39,11 @@ const HomePage = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
+
       try {
         const URL = searchTerm ? TMDB_SEARCH_URL : DISCOVER_URL;
+
+        // Set parameters for the request
         const params = {
           api_key: API_KEY,
           query: searchTerm || undefined,
@@ -52,28 +51,30 @@ const HomePage = () => {
           page: currentPage,
         };
 
-        // ✅ Ensure `with_genres` is included correctly
-        if (category) {
+        // Only add `with_genres` if the category is not "All Genres"
+        if (category !== "All Genres") {
           params.with_genres = category;
         }
 
         const response = await axios.get(URL, { params });
 
-        console.log("API Response:", response.data); // Debugging
-
+        // Filter out movies without poster images
         const moviesWithImages = response.data.results
-          .filter((movie) => movie.poster_path)
+          .filter((movie) => movie.poster_path) // Ensure only movies with a poster are included
           .map((movie) => ({
             ...movie,
             posterPath: `${IMAGE_BASE_URL}${movie.poster_path}`,
           }));
 
+        // If it's the first page (initial load), reset movieData to only the new movies
         if (currentPage === 1) {
           setMovieData(moviesWithImages);
         } else {
+          // Otherwise, append new data to the existing list
           setMovieData((prevData) => [...prevData, ...moviesWithImages]);
         }
 
+        // Set the slide data for the hero carousel (only the first time movies are loaded)
         if (firstRender && moviesWithImages.length > 0) {
           setFirstRender(false);
           setSlideData(populateHeroCarouselData(moviesWithImages));
@@ -91,11 +92,11 @@ const HomePage = () => {
   const handleSearch = (term) => {
     setSearchTerm(term);
     setCurrentPage(1);
-    setMovieData([]);
+    setMovieData([]); // Reset movie list when searching
   };
 
-  const handleGenreChange = (genreId) => {
-    setCategory(genreId);
+  const handleGenreChange = (genre) => {
+    setCategory(genre);
     setCurrentPage(1);
     setMovieData([]);
   };
@@ -124,7 +125,7 @@ const HomePage = () => {
           }
         >
           <div className="flex justify-between items-center mb-8">
-            <h1 className="font-bold text-4xl">Find Movies</h1>
+            <h1 className="font-bold text-4xl">Discover Movies</h1>
           </div>
 
           {isLoading && (
@@ -145,7 +146,7 @@ const HomePage = () => {
                 "&:hover": { backgroundColor: "#e68900" },
                 textTransform: "none",
               }}
-              onClick={loadMore}
+              onPress={loadMore}
             >
               Load More
             </Button>
