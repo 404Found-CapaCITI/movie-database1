@@ -68,14 +68,14 @@ NEXT_PUBLIC_API_KEY=your_tmdb_api_key
 Replace your_tmdb_api_key with your actual TMDb API key. You can obtain it from TMDb's API page.
 
 ### Usage
-Search for Movies: Type the movie title in the search bar and hit Enter to search.
+Search for Movies: Type the movie title in the search bar to search.
 Filter by Genre: Use the genre dropdown to filter movies by categories like Action, Comedy, Horror, etc.
 Toggle Theme: Use the sun/moon icon in the navbar to toggle between dark and light themes.
 Infinite Scroll: Scroll down the page to load more movies automatically.
 
 ### Group Members
 ** Member 1: Mpho
-** Member 2: Nosiphp
+** Member 2: Nosipho
 ** Member 3: Isabella
 ** Member 4: Pelma
 
@@ -88,15 +88,8 @@ User Authentication: Add user login functionality to allow users to create watch
 Reviews and Ratings: Implement a feature that lets users leave reviews and rate movies.
 Offline Mode: Implement caching so that users can browse movies even without an active internet connection.
 Trending Movies: Include a section that highlights the trending movies of the week/month.
+
+
 License
 This project is licensed under the MIT License – see the LICENSE file for details.
-
-markdown
-Copy
-
-### Steps:
-
-1. **Create the `README.md` file** in your project root directory.
-2. **Copy the above content** and paste it into the `README.md` file.
-3. **Save the file**.
 

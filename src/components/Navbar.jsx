@@ -5,57 +5,42 @@ import "./Navbar.css";
 const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
   const [prevScrollY, setPrevScrollY] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(
+    localStorage.getItem("darkMode") === "true"
+  );
 
+  // Handle dark mode toggle
   const handleDarkModeToggle = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-    localStorage.setItem("darkMode", newDarkMode); 
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("darkMode", newMode);
+      return newMode;
+    });
   };
 
+  // Handle scroll visibility
   const handleScroll = useCallback(() => {
-    if (window.scrollY > prevScrollY) {
-      setVisible(false);
-    } else {
-      setVisible(true);
-    }
+    setVisible(window.scrollY < prevScrollY);
     setPrevScrollY(window.scrollY);
   }, [prevScrollY]);
 
+  // Apply dark mode on mount
   useEffect(() => {
-    
-    const savedDarkMode = localStorage.getItem("darkMode") === "true"; 
-    setDarkMode(savedDarkMode);
-
-    if (savedDarkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
-  }, []); 
-
-  useEffect(() => {
-    
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
+    document.body.classList.toggle("dark-mode", darkMode);
   }, [darkMode]);
 
+  // Attach scroll event listener
   useEffect(() => {
-   
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
   return (
     <div className={`navbar ${visible ? "visible" : "hidden"}`}>
       <div className="logo">
-        {/* Apply dark mode styles to the movie title */}
-        <h2 className="font-bold text-xl text-black dark:text-white">404 Found</h2> {/* Movie title */}
+        <h2 className="font-bold text-xl text-black dark:text-white">
+          404 Found
+        </h2>
       </div>
 
       <div className="search-category">
@@ -72,7 +57,7 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
 
         <select
           className="category-dropdown"
-          value={category}
+          value={category || "all"} // Ensures category is never null
           onChange={(e) => setCategory(e.target.value)}
         >
           <option value="all">All Genres</option>
