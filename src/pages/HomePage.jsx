@@ -147,7 +147,7 @@ const HomePage = () => {
                 "&:hover": { backgroundColor: "#e68900" },
                 textTransform: "none",
               }}
-              onPress={loadMore}
+              onClick={loadMore}
             >
               Load More
             </Button>
