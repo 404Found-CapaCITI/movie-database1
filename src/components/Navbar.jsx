@@ -57,10 +57,10 @@ const Navbar = ({ searchTerm, setSearchTerm, category, setCategory }) => {
 
         <select
           className="category-dropdown"
-          value={category || "all"} // Ensures category is never null
+          value={category || "All Genres"} // Ensures category is never null
           onChange={(e) => setCategory(e.target.value)}
         >
-          <option value="all">All Genres</option>
+          <option value="All Genres">All Genres</option>
           <option value="28">Action</option>
           <option value="12">Adventure</option>
           <option value="16">Animation</option>
